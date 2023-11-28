@@ -1,7 +1,8 @@
-import pandas as pd
 from openpyxl import Workbook
+from openpyxl.styles import Border, Side
 import calendar
 import numpy as np
+import pandas as pd
 
 # Define the number of days and shifts per day
 num_days = 30  # Number of days in the month
@@ -54,7 +55,17 @@ for resource in resources:
         row.append(shift_code if not pd.isnull(shift_code) else '')
     ws.append(row)
 
-# Save the Excel file
-wb.save('shift_roster_custom_format_v7.xlsx')
+# Add border to the outside of the data
+max_row = ws.max_row
+max_col = ws.max_column
+border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+for row in ws.iter_rows(min_row=1, max_row=max_row, min_col=1, max_col=max_col):
+    for cell in row:
+        if cell.row == 1 or cell.column == 1:
+            continue
+        cell.border = border
 
-print("Shift roster generated and saved to 'shift_roster_custom_format_v7.xlsx'")
+# Save the Excel file
+wb.save('shift_roster_custom_format_v8.xlsx')
+
+print("Shift roster generated and saved to 'shift_roster_custom_format_v8.xlsx'")
